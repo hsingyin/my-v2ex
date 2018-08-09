@@ -1,21 +1,30 @@
 <template>
-    <el-card shadow="always" class="post">
-        <div slot="header" class="clearfix">
-            <div class="container">
-              <div class="post-prview">
-                <img class="avatar" v-bind:src="this.post.author.avatar" alt="avatar">
-                <a class="post-title" v-bind:href="this.post.url">{{ this.post.title }}</a>
-                <el-badge :value="this.post.replies" :max="999" class="item">
-                  <el-button>回帖</el-button>
-                </el-badge>
-                <a class="author" v-bind:href="this.post">{{ this.post.author.userName }}</a>
-              </div>
+    <el-container class="wrap">
+      <el-header class="header">Header</el-header>
+      <el-main class="main">
+        <ul>
+          <el-card shadow="always" class="post" v-for=" item in postData" :key="item.id">
+            <div slot="header" class="clearfix">
+                <div class="container">
+                  <div class="post-prview">
+                    <img class="avatar" v-bind:src="item.member.avatar_mini" alt="avatar">
+                    <a class="post-title" v-bind:href="item.url">{{ item.title }}</a>
+                    <el-badge :value="item.replies" :max="999" class="replies-num">
+                      <el-button>回帖</el-button>
+                    </el-badge>
+                    <a class="author" v-bind:href="item.member.url">{{ item.member.username }}</a>
+                  </div>
+                </div>
             </div>
-        </div>
-        <div class="content clearfix">
-          <el-button style="float: right;" type="text" @click="handlePostDetail">查看原帖</el-button>
-        </div>
-    </el-card>
+            <div class="content clearfix">
+              <el-button class="node-name" round size="small"># {{ item.node.title }}</el-button>
+              <el-button class="post-detail" style="float: right;" type="text" @click="handlePostDetail">查看原帖</el-button>
+            </div>
+          </el-card>
+        </ul>
+      </el-main>
+      <el-footer class="footer">footer</el-footer>
+    </el-container>
 </template>
 
 <script>
@@ -24,16 +33,7 @@ export default {
   data () {
     return {
       msg: '主页',
-      post: {
-        title: '',
-        url: '',
-        author: {
-          userName: '',
-          avatar: '',
-          url: ''
-        },
-        replies: 0
-      }
+      postData: {}
     }
   },
   created: function () {
@@ -45,13 +45,7 @@ export default {
       this.$axios.get('api/topics/hot.json')
         .then((response) => {
           console.log(response.data)
-          var topics = response.data
-          this.post.title = topics[0].title
-          this.post.url = topics[0].url
-          this.post.replies = topics[0].replies
-          this.post.author.userName = topics[0].member.username
-          this.post.author.avatar = topics[0].member.avatar_mini
-          // this.changeLargeAvatar(topics[0].member.avatar_mini)
+          this.postData = response.data
         })
         .catch((error) => {
           console.log(error)
@@ -68,7 +62,10 @@ export default {
     // })
     },
     handlePostDetail () {
-      window.location.href = this.post.url
+      // window.location.href = item.url
+    },
+    handleNode () {
+      // window.location.href = this.item.node.url
     },
     changeLargeAvatar (url) {
       console.log('传入的url' + url)
@@ -96,9 +93,23 @@ a {
   color: inherit;
   text-decoration: none;
 }
+.wrap {
+  width: 1000px;
+  margin: 0 auto;
+  height: auto;
+}
+.main {
+  width: 1000px;
+
+}
+.footer {
+  background-color: #f7fbfd;
+}
 .post {
   width: 800px;
+  height: auto;
   margin: 0 auto;
+  margin-bottom: 8px;
 }
 .post-prview {
   height: 50px;
@@ -120,16 +131,27 @@ a {
 }
 .author {
   padding-left: 10px;
-  color: black;
+  color: gray;
   float: left;
 }
-.item {
+.replies-num {
   width: 50px;
   height: 30px;
   margin-right: 18px;
   float: right;
 }
+.post-detail {
+  padding-right: 20px;
+  float: right;
+}
+.node-name {
+  margin-top: 4px;
+  margin-left: 10px;
+}
 .el-badge__content {
   height: 30;
+}
+.el-card__body {
+  padding: 0;
 }
 </style>
