@@ -24,10 +24,13 @@
             </div>
           </el-card>
           <ul>
-            <replie class="replie" v-for="replie in postReplies" :key="replie.id" :replie="replie"></replie>
+            <replie class="replie" v-for="replie in postReplies" :key="replie.id" :replie="replie" v-loading="loading"></replie>
           </ul>
       </el-main>
-      <el-footer class="footer">@hsingyin</el-footer>
+      <el-footer class="footer">
+        <div class="copyright"><a href="https://github.com/hsingyin">@hsingyin </a></div>
+        <small class="slogan">♥ Do have faith in what you're doing.</small>
+      </el-footer>
     </el-container>
 </template>
 <script>
@@ -40,7 +43,8 @@ export default {
   data () {
     return {
       postContent: {},
-      postReplies: []
+      postReplies: [],
+      loading: true
     }
   },
   created: function () {
@@ -73,6 +77,7 @@ export default {
         .then((response) => {
           console.log(response.data)
           this.postReplies = response.data
+          this.loading = false
         })
         .catch((error) => {
           console.log(error)
@@ -158,5 +163,18 @@ a {
     height: auto;
     margin: 0 auto;
     margin-bottom: 8px;
+}
+.footer {
+  position: relative;
+}
+.copyright {
+  position: absolute;
+  left: 100px;
+}
+.slogan {
+  position: absolute;
+  left: 100px;
+  top: 30px;
+  color: gray;
 }
 </style>

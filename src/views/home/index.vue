@@ -3,18 +3,21 @@
       <el-header class="header" height="120px">
         <div class="logo"></div>
         <el-breadcrumb separator="/" class="nav">
-          <el-breadcrumb-item><a href="/hot" @click="getHotList">最热</a></el-breadcrumb-item>
+          <el-breadcrumb-item><a @click="getHotList">最热</a></el-breadcrumb-item>
           <el-breadcrumb-item><a @click="getLatestList">最新</a></el-breadcrumb-item>
-          <el-breadcrumb-item><a href="/">节点</a></el-breadcrumb-item>
+          <el-breadcrumb-item><a href="/nodes">节点</a></el-breadcrumb-item>
           <!-- <el-breadcrumb-item><a href="/">关于</a></el-breadcrumb-item> -->
         </el-breadcrumb>
       </el-header>
-      <el-main class="main">
+      <el-main class="main" v-loading="loading">
         <ul>
           <post v-for=" postData in posts" :key="postData.id" :postData="postData"></post>
         </ul>
       </el-main>
-      <el-footer class="footer">@hsingyin</el-footer>
+      <el-footer class="footer">
+        <div class="copyright"><a href="https://github.com/hsingyin">@hsingyin </a></div>
+        <small class="slogan">♥ Do have faith in what you're doing.</small>
+      </el-footer>
     </el-container>
 </template>
 
@@ -29,7 +32,8 @@ export default {
   data () {
     return {
       msg: '主页',
-      posts: {}
+      posts: {},
+      loading: true
     }
   },
   created: function () {
@@ -43,6 +47,7 @@ export default {
         .then((response) => {
           console.log(response.data)
           this.posts = response.data
+          this.loading = false
         })
         .catch((error) => {
           console.log(error)
@@ -54,6 +59,7 @@ export default {
         .then((response) => {
           console.log(response.data)
           this.posts = response.data
+          this.loading = false
         })
         .catch((error) => {
           console.log(error)
@@ -98,7 +104,7 @@ a {
 }
 .main {
   width: 1000px;
-
+  min-height: 500px;
 }
 .header {
   position: relative;
@@ -119,5 +125,18 @@ a {
   position: absolute;
   bottom: 0;
   left: 100px;
+}
+.footer {
+  position: relative;
+}
+.copyright {
+  position: absolute;
+  left: 100px;
+}
+.slogan {
+  position: absolute;
+  left: 100px;
+  top: 30px;
+  color: gray;
 }
 </style>

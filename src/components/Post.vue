@@ -50,6 +50,7 @@ a {
 }
 .post-prview {
   height: 50px;
+  position: relative;
 }
 .avatar {
   width: 48px;
@@ -64,6 +65,9 @@ a {
   font-size: 16px;
   line-height: 1.6;
   font-weight: 600;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
   cursor: pointer;
   float: left;
 }
