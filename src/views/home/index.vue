@@ -3,8 +3,8 @@
       <el-header class="header" height="120px">
         <div class="logo"></div>
         <el-breadcrumb separator="/" class="nav">
-          <el-breadcrumb-item :to="{ path: '/' }">最热</el-breadcrumb-item>
-          <el-breadcrumb-item><a href="/">最新</a></el-breadcrumb-item>
+          <el-breadcrumb-item><a href="/hot" @click="getHotList">最热</a></el-breadcrumb-item>
+          <el-breadcrumb-item><a @click="getLatestList">最新</a></el-breadcrumb-item>
           <el-breadcrumb-item><a href="/">节点</a></el-breadcrumb-item>
           <!-- <el-breadcrumb-item><a href="/">关于</a></el-breadcrumb-item> -->
         </el-breadcrumb>
@@ -33,10 +33,11 @@ export default {
     }
   },
   created: function () {
-    this.getList()
+    // 默认获取最火信息
+    this.getHotList()
   },
   methods: {
-    getList () {
+    getHotList () {
     // 获取热门主题下的信息
       this.$axios.get('api/topics/hot.json')
         .then((response) => {
@@ -46,16 +47,17 @@ export default {
         .catch((error) => {
           console.log(error)
         })
-    // 获取热门回复
-    // this.$axios.get('api/replies/show.json', {
-    //   params: {
-    //     topic_id: 477835
-    //   }
-    // }).then((response) => {
-    //   console.log(response.data)
-    // }).catch((error) => {
-    //   console.log(error)
-    // })
+    },
+    getLatestList () {
+    // 获取最新主题下的信息
+      this.$axios.get('api/topics/latest.json')
+        .then((response) => {
+          console.log(response.data)
+          this.posts = response.data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     },
     handlePostDetail () {
       // window.location.href = item.url

@@ -4,7 +4,7 @@
           <div class="container">
             <div class="post-prview">
               <img class="avatar" v-bind:src="postData.member.avatar_mini" alt="avatar">
-              <a class="post-title" v-bind:href="postData.url">{{ postData.title }}</a>
+              <a class="post-title" @click="handlePostDetail">{{ postData.title }}</a>
               <el-badge :value="postData.replies" :max="999" class="replies-num">
                 <el-button>回帖</el-button>
               </el-badge>
@@ -14,10 +14,9 @@
         </div>
         <div class="content clearfix">
           <el-button class="node-name" round size="small"># {{ postData.node.title }}</el-button>
-          <el-button class="post-detail" style="float: right;" type="text" @click="handlePostDetail">查看原帖</el-button>
+          <el-button class="post-detail" style="float: right;" type="text" v-bind:href="postData.url">查看原帖</el-button>
         </div>
       </el-card>
-      <!-- <h1>{{postData.url}}</h1> -->
 </template>
 
 <script>
@@ -32,7 +31,7 @@ export default {
   },
   methods: {
     handlePostDetail () {
-
+      this.$router.push({path: '/postDetail/' + this.postData.id})
     }
   }
 }
@@ -65,6 +64,7 @@ a {
   font-size: 16px;
   line-height: 1.6;
   font-weight: 600;
+  cursor: pointer;
   float: left;
 }
 .author {
