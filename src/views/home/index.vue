@@ -1,39 +1,35 @@
 <template>
     <el-container class="wrap">
-      <el-header class="header">Header</el-header>
+      <el-header class="header" height="120px">
+        <div class="logo"></div>
+        <el-breadcrumb separator="/" class="nav">
+          <el-breadcrumb-item :to="{ path: '/' }">最热</el-breadcrumb-item>
+          <el-breadcrumb-item><a href="/">最新</a></el-breadcrumb-item>
+          <el-breadcrumb-item><a href="/">节点</a></el-breadcrumb-item>
+          <!-- <el-breadcrumb-item><a href="/">关于</a></el-breadcrumb-item> -->
+        </el-breadcrumb>
+      </el-header>
       <el-main class="main">
         <ul>
-          <el-card shadow="always" class="post" v-for=" item in postData" :key="item.id">
-            <div slot="header" class="clearfix">
-                <div class="container">
-                  <div class="post-prview">
-                    <img class="avatar" v-bind:src="item.member.avatar_mini" alt="avatar">
-                    <a class="post-title" v-bind:href="item.url">{{ item.title }}</a>
-                    <el-badge :value="item.replies" :max="999" class="replies-num">
-                      <el-button>回帖</el-button>
-                    </el-badge>
-                    <a class="author" v-bind:href="item.member.url">{{ item.member.username }}</a>
-                  </div>
-                </div>
-            </div>
-            <div class="content clearfix">
-              <el-button class="node-name" round size="small"># {{ item.node.title }}</el-button>
-              <el-button class="post-detail" style="float: right;" type="text" @click="handlePostDetail">查看原帖</el-button>
-            </div>
-          </el-card>
+          <post v-for=" postData in posts" :key="postData.id" :postData="postData"></post>
         </ul>
       </el-main>
-      <el-footer class="footer">footer</el-footer>
+      <el-footer class="footer">@hsingyin</el-footer>
     </el-container>
 </template>
 
 <script>
+import Post from '@/components/Post'
+
 export default {
   name: 'home',
+  components: {
+    'post': Post
+  },
   data () {
     return {
       msg: '主页',
-      postData: {}
+      posts: {}
     }
   },
   created: function () {
@@ -45,7 +41,7 @@ export default {
       this.$axios.get('api/topics/hot.json')
         .then((response) => {
           console.log(response.data)
-          this.postData = response.data
+          this.posts = response.data
         })
         .catch((error) => {
           console.log(error)
@@ -102,56 +98,24 @@ a {
   width: 1000px;
 
 }
-.footer {
-  background-color: #f7fbfd;
+.header {
+  position: relative;
 }
-.post {
-  width: 800px;
-  height: auto;
-  margin: 0 auto;
-  margin-bottom: 8px;
-}
-.post-prview {
-  height: 50px;
-}
-.avatar {
-  width: 48px;
-  height: 48px;
-  float: left;
-}
-.post-title {
-  width: 80%;
-  padding-left: 10px;
-  color: #1a1a1a;
-  text-align: left;
-  font-size: 16px;
-  line-height: 1.6;
-  font-weight: 600;
-  float: left;
-}
-.author {
-  padding-left: 10px;
-  color: gray;
-  float: left;
-}
-.replies-num {
-  width: 50px;
+.logo {
+  width: 94px;
   height: 30px;
-  margin-right: 18px;
-  float: right;
+  /* margin-top: 25px;
+  margin-left: 80px; */
+  position: absolute;
+  top: 25px;
+  left: 100px;
+  background: url('../../assets/images/v2ex.png') no-repeat;
+  background-size: 94px 30px;
 }
-.post-detail {
-  padding-right: 20px;
-  float: right;
-}
-.node-name {
-  margin-top: 4px;
-  margin-left: 10px;
-}
-.el-badge__content {
-  height: 30;
-}
-.el-card__body {
-  padding: 0;
+.nav {
+  width: auto;
+  position: absolute;
+  bottom: 0;
+  left: 100px;
 }
 </style>
