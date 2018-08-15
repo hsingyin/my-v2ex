@@ -12,9 +12,11 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'https://www.v2ex.com:443',
-        secure: false,
-        changeOrigin: true
+        target: 'https://www.v2ex.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': '/api'
+        }
       }
     },
 
